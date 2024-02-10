@@ -1,6 +1,7 @@
 package dao;
 
 import core.Db;
+import entity.Hotel;
 import entity.Pansion;
 import entity.User;
 
@@ -13,8 +14,10 @@ import java.util.ArrayList;
 public class PansionDao {
 
     private Connection con;
+    private HotelDao hotelDao;
     public PansionDao(){
         this.con = Db.getInstance();
+        this.hotelDao = new HotelDao();
     }
 
     public boolean save(Pansion newPansion){
@@ -45,8 +48,44 @@ public class PansionDao {
     }
     public Pansion match(ResultSet rs) throws SQLException{
         Pansion obj = new Pansion();
+        obj.setId(rs.getInt("id"));
         obj.setHotelId(rs.getInt("hotel_id"));
         obj.setPansionType(rs.getString("pansion_type"));
+        obj.setHotel(hotelDao.getById(rs.getInt("hotel_id")));
         return obj;
     }
+
+    public Pansion getById(int id){
+        Pansion obj = null;
+        String query = "SELECT * FROM public.hotel_pansion WHERE id = ?";
+        try {
+            PreparedStatement pr = con.prepareStatement(query);
+            pr.setInt(1,id);
+            ResultSet rs = pr.executeQuery();
+            if (rs.next()){
+                obj = this.match(rs);
+            }
+        } catch (SQLException throwables){
+            throwables.printStackTrace();
+        }
+        return obj;
+    }
+
+    public Pansion getByIdHotel(int id){
+        Pansion obj = null;
+        String query = "SELECT * FROM public.hotel_pansion WHERE hotel_id = ?";
+        try {
+            PreparedStatement pr = con.prepareStatement(query);
+            pr.setInt(1,id);
+            ResultSet rs = pr.executeQuery();
+            if (rs.next()){
+                obj = this.match(rs);
+            }
+        } catch (SQLException throwables){
+            throwables.printStackTrace();
+        }
+        return obj;
+    }
+
+
 }

@@ -28,13 +28,19 @@ public class PansionManager {
         for (Pansion pansion : pansionList){
             int i = 0;
             Object[] rowObject = new Object[size];
+            rowObject[i++] = pansion.getId();
             rowObject[i++] = pansion.getHotelId();
             rowObject[i++] = pansion.getPansionType();
             pansionObjList.add(rowObject);
         }
         return pansionObjList;
     }
-
+    public Pansion getById(int id){
+        return this.pansionDao.getById(id);
+    }
+    public Pansion getByIdHotel(int id){
+        return this.pansionDao.getByIdHotel(id);
+    }
     public ArrayList<Pansion> findAll(){
         return this.pansionDao.findAll();
     }

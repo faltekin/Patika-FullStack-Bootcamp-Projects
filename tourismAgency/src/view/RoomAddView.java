@@ -3,11 +3,10 @@ package view;
 import business.HotelManager;
 import business.PansionManager;
 import business.RoomManager;
+import business.SeasonManager;
+import core.ComboItem;
 import core.Helper;
-import entity.Hotel;
-import entity.Pansion;
-import entity.Room;
-import entity.User;
+import entity.*;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -37,43 +36,75 @@ public class RoomAddView extends Layout{
     private Room room;
     private PansionManager pansionManager;
 
+    private SeasonManager seasonManager;
+
     private JPanel container;
 
     public RoomAddView(Room room){
         this.roomManager = new RoomManager();
         this.hotelManager = new HotelManager();
+        this.pansionManager = new PansionManager();
+        this.seasonManager = new SeasonManager();
         this.room = room;
         add(container);
         this.guiInitilaze(700,700);
 
         for (Hotel ho : this.hotelManager.findAll()){       // cmb_room_add_hotel otel isimleriyle doldurulur
-            this.cmb_room_add_hotel.addItem(ho.getName());
-
+            //this.cmb_room_add_hotel.addItem(ho.getName());
+            this.cmb_room_add_hotel.addItem(ho.getComboItem());
         }
 
+        this.cmb_room_add_hotel.addActionListener(e -> {    // Değerlendirme formu 14 - Oda ekleme
+            this.cmb_room_add_pansion.removeAllItems();
+            this.cmb_room_add_season.removeAllItems();
+
+            int selectedHotelId = ((ComboItem) this.cmb_room_add_hotel.getSelectedItem()).getKey();
+
+            for (Season season : this.seasonManager.findAll()) {
+                if(season.getHotelId() == selectedHotelId){
+                    this.cmb_room_add_season.addItem(season.getComboItem());
+                }
+            }
+            for (Pansion pansion : this.pansionManager.findAll()) {
+                if(pansion.getHotelId() == selectedHotelId){
+                    this.cmb_room_add_pansion.addItem(pansion.getComboItem());
+                }
+            }
+        });
+
+        loadRoomAddComponent(this.pansionManager);
+
+    }
+
+
+    public void loadRoomAddComponent(PansionManager pm){
         btn_room_add_save.addActionListener(new ActionListener() {      // Değerlendirme formu 13
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 JTextField[] fieldList = {fld_room_add_stock,fld_room_add_adult,fld_room_add_child,fld_room_add_bed_capacity,fld_room_add_square_meter};
                 if (Helper.isFieldListEmpty(fieldList)){
                     Helper.showMsg("fill");
                 } else {
 
-                    String selectedHotelName = (String) cmb_room_add_hotel.getSelectedItem();   // Seçilen otel ismi döngüye sokulularak bulunur
-                    int selectedHotelId = 0;
-                    for (Hotel hotel : hotelManager.findAll()) {
-                        if (hotel.getName().equals(selectedHotelName)) {
-                            selectedHotelId = hotel.getId();
-                            break;
-                        }
-                    }
 
+
+                    ComboItem selectedHotelItem = (ComboItem) cmb_room_add_hotel.getSelectedItem();
+                    int selectedHotelId = selectedHotelItem.getKey();
 
                     boolean result;
                     Room newRoom = new Room();
                     newRoom.setHotelId(selectedHotelId);
-                    newRoom.setPansionId(cmb_room_add_pansion.getSelectedIndex()+1);
-                    newRoom.setSeasonId(cmb_room_add_season.getSelectedIndex()+1);
+
+                    ComboItem selectenPansion = (ComboItem) cmb_room_add_pansion.getSelectedItem();
+                    newRoom.setPansionId(selectenPansion.getKey());
+                    System.out.println(selectenPansion.getKey());
+
+                    ComboItem selectenSeason = (ComboItem) cmb_room_add_season.getSelectedItem();
+                    newRoom.setSeasonId(selectenSeason.getKey());
+
+                    System.out.println(selectenPansion);
+
                     newRoom.setRoomType((String) cmb_room_add_room_type.getSelectedItem());
                     newRoom.setStock(Integer.parseInt(fld_room_add_stock.getText()));
                     newRoom.setAdultPrice(Integer.parseInt(fld_room_add_adult.getText()));
@@ -96,6 +127,6 @@ public class RoomAddView extends Layout{
             }
 
         });
-    }
 
+    }
 }

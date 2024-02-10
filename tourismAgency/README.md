@@ -4,6 +4,40 @@ Patika+ FullStack Web Developer ( Cohort-2 w) 8.Hafta Bitrime Projesi
 Employee   -> fuat - 456
 Admin      -> root - 123
 
+- Revize
+  -
+  - https://www.loom.com/share/3da058ee38864c93841d94c2bee36521
+
+![main.png](images%2Fmain.png)
+
+![0.png](images%2F0.png)
+- Odalar listelenir
+
+![1.png](images%2F1.png)
+- Rezerve yapabilmek için tüm alanların dolu olması gerekiyor
+
+![2.png](images%2F2.png)
+- Seçtiğimiz odanın rezerve işlemi yapılır
+
+![3.png](images%2F3.png)
+- Rezervasyonlar listelenir
+
+![4.png](images%2F4.png)
+- Rezervasyon yaptığımız odanın stock değeri bir azalır
+
+![5.png](images%2F5.png)
+- Rezervasyon listesinde müşteri bilgilerini istersek güncelleyebiliriz
+
+![6.png](images%2F6.png)
+
+![7.png](images%2F7.png)
+- Rezervasyon silme işlemini yine bu listede yapabiliriz
+
+![8.png](images%2F8.png)
+- Rezervasyonu silersek o odanın stock değeri bir artar
+
+----------------------------------------------
+
 
 ![login.png](images%2Flogin.png)
 - Kullanıcı Giriş Ekranı

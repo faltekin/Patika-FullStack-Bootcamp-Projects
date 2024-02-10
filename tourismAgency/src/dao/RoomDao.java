@@ -87,6 +87,7 @@ public class RoomDao {
         room.setCashBox(rs.getBoolean("cash_box"));
         room.setProjection(rs.getBoolean("projection"));
 
+
         return room;
     }
 
@@ -121,7 +122,7 @@ public class RoomDao {
         }
 
     }
-    public void ıncStock(int selectdRoomId) {
+    public void incStock(int selectdRoomId) {   // Değerlendirme formu 23
 
         Room rmd = getById(selectdRoomId);
         int currentStock = rmd.getStock();
@@ -137,4 +138,5 @@ public class RoomDao {
         }
 
     }
+
 }

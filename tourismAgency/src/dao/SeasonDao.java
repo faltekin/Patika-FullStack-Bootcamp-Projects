@@ -1,6 +1,7 @@
 package dao;
 
 import core.Db;
+import entity.Hotel;
 import entity.Pansion;
 import entity.Season;
 
@@ -10,8 +11,10 @@ import java.util.ArrayList;
 
 public class SeasonDao {
     private Connection con;
+    private HotelDao hotelDao;
     public SeasonDao(){
         this.con = Db.getInstance();
+        this.hotelDao = new HotelDao();
     }
 
 
@@ -59,9 +62,11 @@ public class SeasonDao {
     }
     public Season match(ResultSet rs) throws SQLException{
         Season obj = new Season();
+        obj.setId(rs.getInt("id"));
         obj.setHotelId(rs.getInt("hotel_id"));
         obj.setStartDate(LocalDate.parse(rs.getString("start_date")));
         obj.setFinishDate(LocalDate.parse(rs.getString("finish_date")));
+        obj.setHotel(hotelDao.getById(rs.getInt("hotel_id")));
         return obj;
     }
 }

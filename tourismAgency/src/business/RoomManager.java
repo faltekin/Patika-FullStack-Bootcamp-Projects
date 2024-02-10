@@ -35,6 +35,7 @@ public class RoomManager {
         for (Room obj : rooms){
             int i = 0;
             Object[] rowObject = new Object[size];
+            //rowObject[i++] = obj.getId();
             rowObject[i++] = obj.getHotelId();
             rowObject[i++] = obj.getPansionId();
             rowObject[i++] = obj.getSeasonId();
@@ -82,6 +83,10 @@ public class RoomManager {
 
         }
 
+        /*String query = "SELECT * FROM public.room AS r " +
+                "JOIN public.hotel AS o ON r.hotel_id = o.id" +
+                "LEFT JOIN season s ON r.season_id = s.id WHERE ";*/
+
         ArrayList<Room> searchedRoomList = this.roomDao.selectByQuery(query);
         return searchedRoomList;
 
@@ -90,5 +95,7 @@ public class RoomManager {
     public ArrayList<Room> findAll(){
         return this.roomDao.findAll();
     }
+
+    public Room getById(int id) {return this.roomDao.getById(id);}
 
 }

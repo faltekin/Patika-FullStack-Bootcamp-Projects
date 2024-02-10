@@ -35,7 +35,8 @@ public class SeasonManager {
         for (Season season : seasonList){
             int i = 0;
             Object[] rowObject = new Object[size];
-            rowObject[i++] = season.getHotelId();
+            rowObject[i++] = season.getId();
+            rowObject[i++] = season.getHotel().getName();
             rowObject[i++] = season.getStartDate();
             rowObject[i++] = season.getFinishDate();
             seasonObjList.add(rowObject);
