@@ -8,6 +8,7 @@ import dev.patika.veterinaryManagement.core.utilities.ResultHelper;
 import dev.patika.veterinaryManagement.dto.request.customer.CustomerUpdateRequest;
 import dev.patika.veterinaryManagement.dto.request.doctor.DoctorSaveRequest;
 import dev.patika.veterinaryManagement.dto.request.doctor.DoctorUpdateRequest;
+import dev.patika.veterinaryManagement.dto.response.AnimalResponse;
 import dev.patika.veterinaryManagement.dto.response.CustomerResponse;
 import dev.patika.veterinaryManagement.dto.response.DoctorResponse;
 import dev.patika.veterinaryManagement.entities.Customer;
@@ -15,6 +16,8 @@ import dev.patika.veterinaryManagement.entities.Doctor;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/v1/doctors")
@@ -35,20 +38,21 @@ public class DoctorController {
         return ResultHelper.success(this.modelMapper.forResponse().map(doctor,DoctorResponse.class));
     }
 
+
     @PostMapping("/save")
-    @ResponseStatus(HttpStatus.CREATED)     // Değerlendirme formu 15
+    @ResponseStatus(HttpStatus.CREATED)     // TODO Değerlendirme formu 15
     public ResultData<DoctorResponse> save(@Valid @RequestBody DoctorSaveRequest doctorSaveRequest ){
-        Doctor saveDoctor = this.modelMapper.forRequest().map(doctorSaveRequest,Doctor.class);
-        this.doctorService.save(saveDoctor);
-        return ResultHelper.created(this.modelMapper.forResponse().map(saveDoctor,DoctorResponse.class));
+
+        return ResultHelper.created(doctorService.save(doctorSaveRequest));
     }
 
-    @PutMapping("/update")
+
+    @PutMapping("/update")     // TODO YENİ
     @ResponseStatus(HttpStatus.OK)
     public ResultData<DoctorResponse> update(@Valid @RequestBody DoctorUpdateRequest doctorUpdateRequest ){
-        Doctor updateDoctor = this.modelMapper.forRequest().map(doctorUpdateRequest,Doctor.class);
-        this.doctorService.update(updateDoctor);
-        return ResultHelper.success(this.modelMapper.forResponse().map(updateDoctor,DoctorResponse.class));
+
+        return ResultHelper.created(doctorService.update(doctorUpdateRequest));
+
     }
 
     @DeleteMapping("/{id}")
@@ -56,6 +60,14 @@ public class DoctorController {
     public Result delete(@PathVariable("id") Long id) {
         this.doctorService.delete(id);
         return ResultHelper.Ok();
+    }
+
+    @GetMapping("/getAll")
+    @ResponseStatus(HttpStatus.OK)
+    public ResultData<List<DoctorResponse>> findAll(){
+
+        return this.doctorService.findAll();
+
     }
 
 

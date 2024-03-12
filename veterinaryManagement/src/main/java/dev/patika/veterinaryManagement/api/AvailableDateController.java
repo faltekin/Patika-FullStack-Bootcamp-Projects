@@ -17,6 +17,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/v1/available-dates")
 public class AvailableDateController {
@@ -38,27 +40,23 @@ public class AvailableDateController {
         return ResultHelper.success(this.modelMapper.forResponse().map(availableDate,AvailableDateResponse.class));
     }
 
+
     @PostMapping("/save")
-    @ResponseStatus(HttpStatus.CREATED)     // Değerlendirme formu 16
+    @ResponseStatus(HttpStatus.CREATED)     // TODO Değerlendirme formu 16
     public ResultData<AvailableDateResponse> save(@Valid @RequestBody AvailableDateSaveRequest availableDateSaveRequest ){
 
-        AvailableDate availableDate = this.modelMapper.forRequest().map(availableDateSaveRequest,AvailableDate.class);
-        Long doctorId = availableDateSaveRequest.getDoctorId();
-        AvailableDate savedDate = this.availableDateService.save(availableDate, doctorId);
-        return ResultHelper.created(this.modelMapper.forResponse().map(savedDate, AvailableDateResponse.class));
+        return ResultHelper.created(availableDateService.save(availableDateSaveRequest));
     }
+
 
     @PutMapping("/update")
     @ResponseStatus(HttpStatus.OK)
     public ResultData<AvailableDateResponse> update(@Valid @RequestBody AvailableDateUpdateRequest availableDateUpdateRequest ){
-        AvailableDate updateDate = this.modelMapper.forRequest().map(availableDateUpdateRequest,AvailableDate.class);
 
-        Doctor doctor = this.doctorService.get(availableDateUpdateRequest.getDoctorId());
-        updateDate.setDoctor(doctor);
-
-        this.availableDateService.update(updateDate);
-        return ResultHelper.success(this.modelMapper.forResponse().map(updateDate,AvailableDateResponse.class));
+        return ResultHelper.created(availableDateService.update(availableDateUpdateRequest));
     }
+
+
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -66,5 +64,14 @@ public class AvailableDateController {
         this.availableDateService.delete(id);
         return ResultHelper.Ok();
     }
+
+    @GetMapping("/getAll")
+    @ResponseStatus(HttpStatus.OK)
+    public ResultData<List<AvailableDateResponse>> findAll(){
+
+        return this.availableDateService.findAll();
+
+    }
+
 
 }

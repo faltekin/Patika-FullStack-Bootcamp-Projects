@@ -1,5 +1,6 @@
 package dev.patika.veterinaryManagement.dto.request.animal;
 
+import dev.patika.veterinaryManagement.entities.Customer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

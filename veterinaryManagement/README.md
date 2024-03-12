@@ -1,117 +1,114 @@
 
+Patika+ FullStack Web Developer Veteriner Yönetim Sistemi Bitirme Projesi
+- 
 
 ![d1.png](images%2Fd1.png)
 
 
-* 10 - Proje isterlerine göre hayvan sahibi kaydediliyor mu ?
-  http://localhost:8080/v1/customers/save
-
-![10.png](images%2F10.png)
-
-* 11 - Hayvan sahipleri isme göre filtreleniyor mu ?
-  http://localhost:8080/v1/customers/name/Fuat
-
-![11.png](images%2F11.png)
 
 
-* 12 - Proje isterlerine göre hayvan sahibi kaydediliyor mu ?
- http://localhost:8080/v1/animals/save
 
-![12.png](images%2F12.png)
+Projede Bulunan Entityler
+- 
+  * Animal
+  * Customer
+  * Vaccine
+  * Doctor
+  * AvailableDate
+  * Appointment
 
-* 13 - Hayvanlar isme göre filtreleniyor mu ?
-  http://localhost:8080/v1/animals/name/mini
+Customer ve Animal İsterler
+- 
+  * kaydetme, güncelleme, görüntüleme ve silme
+  *  isme göre filtreleme
+  * Hayvan sahibinin sistemde kayıtlı tüm hayvanlarını görüntülenmesi
 
-![13.png](images%2F13.png)
+Vaccine İsterler
+- 
+* kaydetme, güncelleme, görüntüleme ve silme
+* Eğer hastaya ait aynı tip aşının (adı ve kodu aynı olan aşı) aşı koruyuculuk bitiş tarihi daha gelmemiş ise sisteme yeni aşı girilememelidir.
+* Hayvan id’sine göre belirli bir hayvana ait tüm aşı kayıtlarını listelemek
+* Kullanıcının aşı koruyuculuk bitiş tarihi yaklaşan hayvanları listeleyebilmesi için gireceği başlangıç ve bitiş tarihlerine göre aşı koruyuculuk bitiş tarihi bu aralıkta olan aşıları hayvan bilgileriyle birlikte listesini geri döndüren API end point'ini oluşturmak.
 
-* 14 - Girilen hayvan sahibinin sistemde kayıtlı tüm hayvanlarını görüntüleme (sadece bir kişiye ait hayvanları görüntüle işlemi) başarılı bir şekilde çalışıyor mu ?
-  http://localhost:8080/v1/animals/customer/1
+Customer ve Animal İsterler
+- 
+* kaydetme, güncelleme, görüntüleme ve silme
+*  isme göre filtreleme
+* Randevular sisteme tarih ve saat içerecek şekilde kaydedilmelidir.
+* Randevu kaydı oluştururken doktorun girilen tarihte müsait günü olup olmadığı eğer ki müsait günü varsa randevu kayıtlarında girilen saatte başka bir randevusu olup olmadığı kontrol edilmelidir.
 
-![14.png](images%2F14.png)
 
-* 15 - Proje isterlerine göre doktor kaydediliyor mu ?
-  http://localhost:8080/v1/doctors/save
+Doctor İsterler
+- 
+* kaydetme, güncelleme, görüntüleme ve silme
 
-![15.png](images%2F15.png)
+AvailableDate İsterler
+- 
+* kaydetme, güncelleme, görüntüleme ve silme
 
-* 16 - Proje isterlerine göre doktor müsait günü kaydediliyor mu ?
-  http://localhost:8080/v1/available-dates/save
+Dikkat Edilecekler
+- 
+* Request ve Response DTO’lar kullanılacak
+* Projede belirtilen entity (varlık) sınıflarını ve bunların arasındaki ilişkiler belirlenmelidir.
+* Exception kullanılmalı
+* Tüm yeni veri kaydetme işlemlerinde zaten var olan bir verinin kaydedilmediği kontrol edilmelidir.
 
-![16.png](images%2F16.png)
 
-* 17 - Proje isterlerine göre randevu kaydediliyor mu ?
-* 18 - Randevu oluşturulurken, doktorun o saatte başka bir randevusu var mı, doktorun müsait günü var mı  kontrolü yapılıyor mu ?
-  http://localhost:8080/v1/appointments/save
 
-![17-1.png](images%2F17-1.png)
-![17-2.png](images%2F17-2.png)
-![17-3.png](images%2F17-3.png)
-![17-4.png](images%2F17-4.png)
 
-* 19 - Randevular kullanıcı tarafından girilen tarih aralığına ve hayvana göre filtreleniyor mu ?
-  http://localhost:8080/v1/appointments/filter/animal/1/2030-01-01T10:00:00/2030-12-01T11:00:00
+Kullandıklarım
+-
+* postgresql
+* projectlombok
+* modelmapper
+* postman - pgAdmin
 
-![19.png](images%2F19.png)
 
-* 20 - Randevular kullanıcı tarafından girilen tarih aralığına ve doktora göre filtreleniyor mu ?
-  http://localhost:8080/v1/appointments/filter/doctor/1/2030-01-01T10:00:00/2030-12-01T11:00:00
 
-![20.png](images%2F20.png)
-
-* 21 - Proje isterlerine göre hayvana ait aşı kaydediliyor mu ?
-* 22 - Yeni aşı kaydetme işleminde koruyuculuk bitiş tarihi kontrolü yapılmış mı ?
-  http://localhost:8080/v1/vaccines/save
-
-![21-1.png](images%2F21-1.png)
-![21-2.png](images%2F21-2.png)
-
-* 23 - Hayvanların aşı kayıtları, girilen tarih aralığına göre doğru şekilde listeleniyor mu ?
-  http://localhost:8080/v1/vaccines/filter/animal/2020-02-01/2024-03-10
-
-![23.png](images%2F23.png)
-
-* 24 - Belirli bir hayvana ait tüm aşı kayıtları (sadece bir hayvanın tüm aşı kayıtları) listelenebiliyor mu ?
-  http://localhost:8080/v1/vaccines/filter/animal/2/2020-02-01/2024-03-10
-
-![24.png](images%2F24.png)
 
 
    Customer
-- http://localhost:8080/v1/customers/8 (id ile customer getirme)
 - http://localhost:8080/v1/customers/save (customer save)
-- http://localhost:8080/v1/customers/name/Fuat (name ile customer getirme)
 - http://localhost:8080/v1/customers/update (customer update)
-- http://localhost:8080/v1/customers/3 (customer delete)
+- http://localhost:8080/v1/customers/name/name/fuat (değerlendirme formu 11 - Hayvan sahipleri isme göre filtreleme)
+- http://localhost:8080/v1/customers/14 (customer delete)
+- http://localhost:8080/v1/customers/getAll (customer find all)
 
    Animal
-- http://localhost:8080/v1/animals/5 (id ile animal getirme)
 - http://localhost:8080/v1/animals/save (animal save)
 - http://localhost:8080/v1/animals/update (animal update)
-- http://localhost:8080/v1/animals/9 (animal delete)
+- http://localhost:8080/v1/animals/14 (animal delete)
+- http://localhost:8080/v1/animals/getAll (animal find all)
+- http://localhost:8080/v1/animals/name/name/Yastık (değerlendirme formu 13 - Hayvanları isme göre filtreleme)
+- http://localhost:8080/v1/animals/customer/customer/2 (değerlendirme formu 14 - Müşterinin sistemdeki tüm hayvanlarını görme)
 
   Doctor
-- http://localhost:8080/v1/doctors/10 (id ile doktor getirme)
 - http://localhost:8080/v1/doctors/save (doctor save)
 - http://localhost:8080/v1/doctors/update (doctor update)
-- http://localhost:8080/v1/doctors/3 (doctor delete)
+- http://localhost:8080/v1/doctors/3 (id ile doctor getirme - delete)
+- http://localhost:8080/v1/doctors/getAll (doctor find all)
 
   Vaccine
-- http://localhost:8080/v1/vaccines/3 (id ile aşı getirme)
 - http://localhost:8080/v1/vaccines/save (vaccine save)
 - http://localhost:8080/v1/vaccines/update (vaccine update)
-- http://localhost:8080/v1/vaccines/400 (vaccine delete)
+- http://localhost:8080/v1/vaccines/400 (vaccine delete - id ile vaccine getirme)
+- http://localhost:8080/v1/vaccines/filter/filter/animal/13 (değerlendirme formu 24 - Belirli bir hayvana ait tüm aşı kayıtları (sadece bir hayvanın tüm aşı kayıtları))
+- http://localhost:8080/v1/vaccines/filter/filter/animal/2099-04-25/2099-05-28 (değerlendirme formu 23 - Hayvanların aşı kayıtları, girilen tarih aralığına göre doğru şekilde listeleniyor mu ?)
+- http://localhost:8080/v1/vaccines/getAll (vaccine find all)
 
   Appointment
-- http://localhost:8080/v1/appointments/3 (id ile appointment getirme)
 - http://localhost:8080/v1/appointments/save (appointment save)
 - http://localhost:8080/v1/appointments/update (appointment update)
-- http://localhost:8080/v1/appointments/700 (appointment delete)
+- http://localhost:8080/v1/appointments/getAll (appointment find all) 
+- http://localhost:8080/v1/appointments/7 (appointment delete - id ile appointment getirme)
+- http://localhost:8080/v1/appointments/filter/doctor/doctor3/1/2020-01-01/2033-12-01 (değerlendirme formu 20 - Randevular kullanıcı tarafından girilen tarih aralığına ve doktora göre filtreleniyor mu ?)
+- http://localhost:8080/v1/appointments/filter/animal/animal3/10/2020-01-01/2033-12-01 (değerlendirme formu 19 - Randevular kullanıcı tarafından girilen tarih aralığına ve hayvana göre filtreleniyor mu ?)
 
   Available Date
-- http://localhost:8080/v1/available-dates/5 (id ile date getirme)
 - http://localhost:8080/v1/available-dates/save (date save)
 - http://localhost:8080/v1/available-dates/update (date update)
-- http://localhost:8080/v1/available-dates/200 (date delete)
+- http://localhost:8080/v1/available-dates/getAll (date find all) 
+- http://localhost:8080/v1/available-dates/11 (date delete - id ile date getirme)
 
 
 

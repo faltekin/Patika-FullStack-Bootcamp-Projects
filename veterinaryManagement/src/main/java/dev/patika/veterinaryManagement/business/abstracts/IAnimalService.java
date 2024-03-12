@@ -1,17 +1,25 @@
 package dev.patika.veterinaryManagement.business.abstracts;
 
+import dev.patika.veterinaryManagement.core.result.ResultData;
+import dev.patika.veterinaryManagement.dto.request.animal.AnimalSaveRequest;
+import dev.patika.veterinaryManagement.dto.request.animal.AnimalUpdateRequest;
+import dev.patika.veterinaryManagement.dto.response.AnimalResponse;
 import dev.patika.veterinaryManagement.entities.Animal;
 
 import java.util.List;
 
 public interface IAnimalService {
 
-    Animal save(Animal animal);
+
+    AnimalResponse save(AnimalSaveRequest animalSaveRequest);
     Animal get(Long id);
-    Animal update(Animal animal);
+
+    AnimalResponse update(AnimalUpdateRequest animalUpdateRequest);
     boolean delete(Long id);
-    List<Animal> findAll();
-    List<Animal> getAnimalByName(String name);
-    List<Animal> getAnimalByCustomerId(Long customerId);
+    ResultData<List<AnimalResponse>> findAll();
+
+    ResultData<List<AnimalResponse>> getAnimalByName(String name);
+
+    ResultData<List<AnimalResponse>> getAnimalByCustomerId(Long customerId);
 
 }

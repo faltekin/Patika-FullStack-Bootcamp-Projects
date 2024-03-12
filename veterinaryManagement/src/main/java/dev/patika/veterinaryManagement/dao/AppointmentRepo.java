@@ -4,6 +4,7 @@ import dev.patika.veterinaryManagement.entities.Appointment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.time.LocalDateTime;
 
@@ -17,10 +18,15 @@ public interface AppointmentRepo extends JpaRepository<Appointment,Long> {
 
     List<Appointment> findByAnimalIdAndAppointmentDateBetween(Long animalId,LocalDateTime startDate,LocalDateTime endDate);
 
-    List<Appointment> findByDoctorIdAndAppointmentDateBetween(Long doctorId,LocalDateTime startDate,LocalDateTime endDate);
+    List<Appointment> findByDoctorIdAndAppointmentDateBetween(Long doctorId, LocalDateTime startDate, LocalDateTime endDate);
 
     List<Appointment> findByAppointmentDateBetweenAndAnimalId(LocalDateTime startDate, LocalDateTime endDate, Long animalId);
 
     boolean existsByDoctorIdAndAppointmentDate(Long doctorId,LocalDateTime appointmentDate);
+
+
+
+
+
 
 }

@@ -9,6 +9,7 @@ import dev.patika.veterinaryManagement.core.utilities.ResultHelper;
 import dev.patika.veterinaryManagement.dto.request.appointment.AppointmentUpdateRequest;
 import dev.patika.veterinaryManagement.dto.request.vaccine.VaccineSaveRequest;
 import dev.patika.veterinaryManagement.dto.request.vaccine.VaccineUpdateRequest;
+import dev.patika.veterinaryManagement.dto.response.AnimalResponse;
 import dev.patika.veterinaryManagement.dto.response.AppointmentResponse;
 import dev.patika.veterinaryManagement.dto.response.VaccineResponse;
 import dev.patika.veterinaryManagement.entities.Animal;
@@ -47,24 +48,18 @@ public class VaccineController {
     }
 
     @PostMapping("/save")
-    @ResponseStatus(HttpStatus.CREATED)     // Değerlendirme formu 21
+    @ResponseStatus(HttpStatus.CREATED)     // TODO Değerlendirme formu 21
     public ResultData<VaccineResponse> save(@Valid @RequestBody VaccineSaveRequest vaccineSaveRequest ){
-        Vaccine vaccine = this.modelMapper.forRequest().map(vaccineSaveRequest,Vaccine.class);
-        Long animalId = vaccineSaveRequest.getAnimalId();
-        Vaccine savedVaccine = this.vaccineService.save(vaccine, animalId);
-        return ResultHelper.created(this.modelMapper.forResponse().map(savedVaccine,VaccineResponse.class));
+
+        return ResultHelper.created(vaccineService.save(vaccineSaveRequest));
     }
 
     @PutMapping("/update")
     @ResponseStatus(HttpStatus.OK)
     public ResultData<VaccineResponse> update(@Valid @RequestBody VaccineUpdateRequest vaccineUpdateRequest ){
-        Vaccine updateVaccine = this.modelMapper.forRequest().map(vaccineUpdateRequest,Vaccine.class);
 
-        Animal animal = this.animalService.get(vaccineUpdateRequest.getAnimalId());
-        updateVaccine.setAnimal(animal);
+        return ResultHelper.created(vaccineService.update(vaccineUpdateRequest));
 
-        this.vaccineService.update(updateVaccine);
-        return ResultHelper.success(this.modelMapper.forResponse().map(updateVaccine,VaccineResponse.class));
     }
 
     @DeleteMapping("/{id}")
@@ -74,28 +69,38 @@ public class VaccineController {
         return ResultHelper.Ok();
     }
 
-    @GetMapping("/filter/animal/{animalId}/{startDate}/{endDate}")     // Değerlendirme formu 24
-    public ResultData<List<VaccineResponse>> getAppointmentsByAnimalIdAndDateRange(
+
+    @GetMapping("/filter/animal/startdate/{animalId}/{startDate}/{endDate}")    // TODO Başlangıç tarihine göre filtreleme yapılır
+    public ResultData<List<VaccineResponse>> getAppointmentsByAnimalIdAndDateRange2(
             @PathVariable("animalId") long animalId,
             @PathVariable("startDate") LocalDate startDate,
             @PathVariable("endDate") LocalDate endDate) {
-        List<Vaccine> vaccineList = vaccineService.findByAnimalIdAndProtectionStartDateBetween(animalId, startDate, endDate);
-        List<VaccineResponse> vaccineResponseList = vaccineList.stream()
-                .map(vaccine -> modelMapper.forResponse().map(vaccine, VaccineResponse.class))
-                .collect(Collectors.toList());
-        return ResultHelper.success(vaccineResponseList);
+
+        return vaccineService.findByAnimalIdAndProtectionStartDateBetween2(animalId,startDate,endDate);
     }
 
-    @GetMapping("/filter/animal/{startDate}/{endDate}")     // Değerlendirme formu 23
-    @ResponseStatus(HttpStatus.OK)
-    public ResultData<List<VaccineResponse>> getVaccinesByDateRange(
+    @GetMapping("/filter/filter/animal/{startDate}/{endDate}")     // TODO Değerlendirme formu 23 - Bitiş tarihine göre filtreleme yapılır
+    public ResultData<List<VaccineResponse>> getAppointmentsByAnimalIdAndDate(
             @PathVariable("startDate") LocalDate startDate,
             @PathVariable("endDate") LocalDate endDate) {
-        List<Vaccine> vaccines = vaccineService.getByProtectionStartDateBetween(startDate, endDate);
-        List<VaccineResponse> vaccineResponses = vaccines.stream()
-                .map(vaccine -> modelMapper.forResponse().map(vaccine, VaccineResponse.class))
-                .collect(Collectors.toList());
 
-        return ResultHelper.success(vaccineResponses);
+        return vaccineService.findByProtectionFinishDateBetween(startDate,endDate);
     }
+
+    @GetMapping("/filter/filter/animal/{animalId}")     // TODO Değerlendirme formu 24 - Bir hayvanın tüm aşı kayıtlarını getirir
+    public ResultData<List<VaccineResponse>> getAppointmentsByAnimalId(
+            @PathVariable("animalId") long animalId)
+    {
+
+        return vaccineService.findByAnimalId(animalId);
+    }
+
+    @GetMapping("/getAll")
+    @ResponseStatus(HttpStatus.OK)
+    public ResultData<List<VaccineResponse>> findAll(){
+
+        return this.vaccineService.findAll();
+
+    }
+
 }

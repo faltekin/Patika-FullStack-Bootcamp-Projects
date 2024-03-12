@@ -43,29 +43,28 @@ public class AnimalController {
         return ResultHelper.success(this.modelMapperService.forResponse().map(animal,AnimalResponse.class));
     }
 
+
     @PostMapping("/save")
-    @ResponseStatus(HttpStatus.CREATED)     // Değerlendirme formu 12
+    @ResponseStatus(HttpStatus.CREATED)     // TODO Değerlendirme formu 12 - müşteri id ve hayvan ismi ile kontrol yapılır - farklı müşterinin aynı isimli hayvanı olabilir
     public ResultData<AnimalResponse> save(@Valid @RequestBody AnimalSaveRequest animalSaveRequest ){
-        Animal saveAnimal = this.modelMapperService.forRequest().map(animalSaveRequest,Animal.class);
+        return ResultHelper.created(animalService.save(animalSaveRequest));
+    }
 
-        Customer customer =this.customerService.get(animalSaveRequest.getCustomerId());
-        saveAnimal.setCustomer(customer);
+    @GetMapping("/getAll")
+    @ResponseStatus(HttpStatus.OK)
+    public ResultData<List<AnimalResponse>> findAll(){
 
-        this.animalService.save(saveAnimal);
-        return ResultHelper.created(this.modelMapperService.forResponse().map(saveAnimal,AnimalResponse.class));
+        return this.animalService.findAll();
+
     }
 
     @PutMapping("/update")
     @ResponseStatus(HttpStatus.OK)
     public ResultData<AnimalResponse> update(@Valid @RequestBody AnimalUpdateRequest animalUpdateRequest ){
-        Animal updateAnimal = this.modelMapperService.forRequest().map(animalUpdateRequest,Animal.class);
 
-        Customer customer = this.customerService.get(animalUpdateRequest.getCustomerId());
-        updateAnimal.setCustomer(customer);
-
-        this.animalService.update(updateAnimal);
-        return ResultHelper.success(this.modelMapperService.forResponse().map(updateAnimal,AnimalResponse.class));
+        return ResultHelper.created(animalService.update(animalUpdateRequest));
     }
+
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -74,35 +73,33 @@ public class AnimalController {
         return ResultHelper.Ok();
     }
 
-
-    @GetMapping("/name/{name}")
-    @ResponseStatus(HttpStatus.OK)      // Değerlendirme formu 13
+    @GetMapping("/name/name/{name}")
+    @ResponseStatus(HttpStatus.OK)      // TODO Değerlendirme formu 13
     public ResultData<List<AnimalResponse>> getAnimalsByName(@PathVariable("name") String name) {
 
-        List<Animal> animals = this.animalService.getAnimalByName(name);
-        List<AnimalResponse> animalResponses = animals.stream().map(animal -> this.modelMapperService.forResponse().map(animal, AnimalResponse.class)).collect(Collectors.toList());
-        return ResultHelper.success(animalResponses);
+        return animalService.getAnimalByName(name);
     }
 
-    @GetMapping("/vaccines/{id}")
+
+
+    /*@GetMapping("/vaccines/vaccines/{id}")          // TODO
     @ResponseStatus(HttpStatus.OK)
-    public ResultData<List<VaccineResponse>> getVaccinesForAnimal(@PathVariable("id") Long id) {
+    public ResultData<List<VaccineResponse>> getVaccinesForAnimal2(@PathVariable("id") Long id) {
 
         Animal animal = this.animalService.get(id);
         List<Vaccine> vaccines = animal.getVaccineList();
         List<VaccineResponse> vaccineResponses = vaccines.stream().map(vaccine -> this.modelMapperService.forResponse().map(vaccine, VaccineResponse.class)).collect(Collectors.toList());
 
         return ResultHelper.success(vaccineResponses);
-    }
 
-    @GetMapping("/customer/{id}")
-    @ResponseStatus(HttpStatus.OK)      // Değerlendirme formu 14
+    }*/
+
+    @GetMapping("/customer/customer/{id}")
+    @ResponseStatus(HttpStatus.OK)      // TODO Değerlendirme formu 14
     public ResultData<List<AnimalResponse>> getAnimalsByCustomerId(@PathVariable("id") Long id) {
 
-        List<Animal> animalList = this.animalService.getAnimalByCustomerId(id);
-        List<AnimalResponse> animalResponseList = animalList.stream().map(animal -> this.modelMapperService.forResponse().map(animal, AnimalResponse.class)).collect(Collectors.toList());
-
-        return ResultHelper.success(animalResponseList);
+        return animalService.getAnimalByCustomerId(id);
     }
+
 
 }

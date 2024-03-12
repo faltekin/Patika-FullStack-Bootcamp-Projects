@@ -19,10 +19,10 @@ public class Vaccine {
     @Column(name = "vaccine_id",columnDefinition = "serial")
     private Long id;
 
-    @Column(name = "vaccine_name",nullable = false)
+    @Column(name = "vaccine_name")
     private String name;
 
-    @Column(name = "vaccine_code",nullable = false,unique = true)
+    @Column(name = "vaccine_code")
     private String code;
 
 

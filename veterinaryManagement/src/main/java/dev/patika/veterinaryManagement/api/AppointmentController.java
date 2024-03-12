@@ -50,34 +50,28 @@ public class AppointmentController {
         return ResultHelper.success(this.modelMapper.forResponse().map(appointment,AppointmentResponse.class));
     }
 
+
     @PostMapping("/save")
-    @ResponseStatus(HttpStatus.CREATED)     // Değerlendirme formu 17
+    @ResponseStatus(HttpStatus.CREATED)     // TODO Değerlendirme formu 17
     public ResultData<AppointmentResponse> save(@Valid @RequestBody AppointmentSaveRequest appointmentSaveRequest ){
-        Appointment saveAppointment = this.modelMapper.forRequest().map(appointmentSaveRequest,Appointment.class);
 
-        Doctor doctor = this.doctorService.get(appointmentSaveRequest.getDoctorId());
-        saveAppointment.setDoctor(doctor);
-
-        Animal animal = this.animalService.get(appointmentSaveRequest.getAnimalId());
-        saveAppointment.setAnimal(animal);
-
-        this.appointmentService.save(saveAppointment);
-        return ResultHelper.created(this.modelMapper.forResponse().map(saveAppointment,AppointmentResponse.class));
+        return ResultHelper.created(appointmentService.save(appointmentSaveRequest));
     }
+
+    @GetMapping("/getAll")
+    @ResponseStatus(HttpStatus.OK)
+    public ResultData<List<AppointmentResponse>> findAll(){
+
+        return this.appointmentService.findAll();
+
+    }
+
 
     @PutMapping("/update")
     @ResponseStatus(HttpStatus.OK)
     public ResultData<AppointmentResponse> update(@Valid @RequestBody AppointmentUpdateRequest appointmentUpdateRequest ){
-        Appointment updateAppointment = this.modelMapper.forRequest().map(appointmentUpdateRequest,Appointment.class);
 
-        Animal animal = this.animalService.get(appointmentUpdateRequest.getAnimalId());
-        updateAppointment.setAnimal(animal);
-
-        Doctor doctor = this.doctorService.get(appointmentUpdateRequest.getDoctorId());
-        updateAppointment.setDoctor(doctor);
-
-        this.appointmentService.update(updateAppointment);
-        return ResultHelper.success(this.modelMapper.forResponse().map(updateAppointment,AppointmentResponse.class));
+        return ResultHelper.created(appointmentService.update(appointmentUpdateRequest));
     }
 
 
@@ -89,32 +83,43 @@ public class AppointmentController {
     }
 
 
-
-    @GetMapping("/filter/doctor/{doctorId}/{startDate}/{endDate}")      // Değerlendirme formu 20
+    @GetMapping("/filter/doctor/doctor/{doctorId}/{startDate}/{endDate}")      // TODO Değerlendirme ZAMANLI
     public ResultData<List<AppointmentResponse>> getAppointmentsByDoctorIdAndDateRange(
             @PathVariable("doctorId") long doctorId,
             @PathVariable("startDate") LocalDateTime startDate,
             @PathVariable("endDate") LocalDateTime endDate) {
-        List<Appointment> appointments = appointmentService.findByDoctorIdAndAppointmentDateBetween(doctorId, startDate, endDate);
-        List<AppointmentResponse> appointmentResponses = appointments.stream()
-                .map(appointment -> modelMapper.forResponse().map(appointment, AppointmentResponse.class))
-                .collect(Collectors.toList());
-        return ResultHelper.success(appointmentResponses);
+
+        return appointmentService.findByDoctorIdAndAppointmentDateBetween(doctorId,startDate,endDate);
     }
 
-    @GetMapping("/filter/animal/{animalId}/{startDate}/{endDate}")      // Değerlendirme formu 19
+    @GetMapping("/filter/doctor/doctor3/{doctorId}/{startDate}/{endDate}")      // TODO Değerlendirme formu 20 ZAMANSIZ
+    public ResultData<List<AppointmentResponse>> getAppointmentsByDoctorIdAndDateRangeWithoutHour(
+            @PathVariable("doctorId") long doctorId,
+            @PathVariable("startDate") LocalDate startDate,
+            @PathVariable("endDate") LocalDate endDate) {
+
+        return appointmentService.findByDoctorIdAndAppointmentDateBetweenWithoutHour(doctorId,startDate,endDate);
+    }
+
+
+    @GetMapping("/filter/animal/animal/{animalId}/{startDate}/{endDate}")      // TODO Değerlendirme ZAMANLI
     public ResultData<List<AppointmentResponse>> getAppointmentsByAnimalIdAndDateRange(
             @PathVariable("animalId") long animalId,
             @PathVariable("startDate") LocalDateTime startDate,
             @PathVariable("endDate") LocalDateTime endDate) {
-        List<Appointment> appointments = appointmentService.findByAnimalIdAndAppointmentDateBetween(animalId, startDate, endDate);
-        List<AppointmentResponse> appointmentResponses = appointments.stream()
-                .map(appointment -> modelMapper.forResponse().map(appointment, AppointmentResponse.class))
-                .collect(Collectors.toList());
-        return ResultHelper.success(appointmentResponses);
+
+        return appointmentService.findByAnimalIdAndAppointmentDateBetween(animalId,startDate,endDate);
+
     }
 
+    @GetMapping("/filter/animal/animal3/{animalId}/{startDate}/{endDate}")      // TODO Değerlendirme formu 19 ZAMANSIZ
+    public ResultData<List<AppointmentResponse>> getAppointmentsByAnimalIdAndDateRangeWithoutHour(
+            @PathVariable("animalId") long animalId,
+            @PathVariable("startDate") LocalDate startDate,
+            @PathVariable("endDate") LocalDate endDate) {
 
+        return appointmentService.findByAnimalIdAndAppointmentDateBetweenWithoutHour(animalId,startDate,endDate);
 
+    }
 
 }

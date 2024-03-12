@@ -39,20 +39,20 @@ public class CustomerController {
         return ResultHelper.success(this.modelMapper.forResponse().map(customer,CustomerResponse.class));
     }
 
+
     @PostMapping("/save")
-    @ResponseStatus(HttpStatus.CREATED)   // // Değerlendirme formu 10
+    @ResponseStatus(HttpStatus.CREATED)   // TODO Değerlendirme formu 10
     public ResultData<CustomerResponse> save(@Valid @RequestBody CustomerSaveRequest customerSaveRequest ){
-        Customer saveCustomer = this.modelMapper.forRequest().map(customerSaveRequest,Customer.class);
-        this.customerService.save(saveCustomer);
-        return ResultHelper.created(this.modelMapper.forResponse().map(saveCustomer,CustomerResponse.class));
+
+        return ResultHelper.created(customerService.save(customerSaveRequest));
     }
+
 
     @PutMapping("/update")
     @ResponseStatus(HttpStatus.OK)
     public ResultData<CustomerResponse> update(@Valid @RequestBody CustomerUpdateRequest customerUpdateRequest ){
-        Customer updateCustomer = this.modelMapper.forRequest().map(customerUpdateRequest,Customer.class);
-        this.customerService.update(updateCustomer);
-        return ResultHelper.success(this.modelMapper.forResponse().map(updateCustomer,CustomerResponse.class));
+
+        return ResultHelper.created(customerService.update(customerUpdateRequest));
     }
 
     @DeleteMapping("/{id}")
@@ -62,13 +62,20 @@ public class CustomerController {
         return ResultHelper.Ok();
     }
 
-    @GetMapping("/name/{name}")
-    @ResponseStatus(HttpStatus.OK)      // Değerlendirme formu 11
+    @GetMapping("/name/name/{name}")
+    @ResponseStatus(HttpStatus.OK)      // TODO Değerlendirme formu 11
     public ResultData<List<CustomerResponse>> getCustomersByName(@PathVariable("name") String name) {
 
-        List<Customer> customers = this.customerService.getCustomerByName(name);
-        List<CustomerResponse> customerResponses = customers.stream().map(customer -> this.modelMapper.forResponse().map(customer, CustomerResponse.class)).collect(Collectors.toList());
-        return ResultHelper.success(customerResponses);
+        return customerService.getCustomerByName(name);
     }
+
+    @GetMapping("/getAll")
+    @ResponseStatus(HttpStatus.OK)
+    public ResultData<List<CustomerResponse>> findAll(){
+
+        return this.customerService.findAll();
+
+    }
+
 
 }
